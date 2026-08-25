@@ -1,21 +1,8 @@
-import React from "react";
-import type {
-  FieldValues,
-  Path,
-  UseFormRegister,
-  FieldErrors,
-} from "react-hook-form";
+import type { FieldValues, Path } from "react-hook-form";
 
-export type FormFieldProps<T extends FieldValues> = {
+import type { InputProps } from "../Input/type";
+
+export type FormFieldProps<T extends FieldValues> = Omit<InputProps, "name"> & {
   name: Path<T>;
-  register: UseFormRegister<T>;
-  errors?: FieldErrors<T>;
-
   label?: string;
-  type?: React.HTMLInputTypeAttribute;
-  placeholder?: string;
-
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-  onRightIconClick?: () => void;
 };

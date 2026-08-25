@@ -4,6 +4,7 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   onRightIconClick?: () => void;
+  passwordToggle?: boolean;
 };
 
 export const commonCss =

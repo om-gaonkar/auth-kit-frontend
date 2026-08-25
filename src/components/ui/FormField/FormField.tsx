@@ -1,19 +1,19 @@
-import type { FieldValues } from "react-hook-form";
+import { useFormContext, type FieldValues } from "react-hook-form";
+
 import { Input } from "../Input/Input";
 import type { FormFieldProps } from "./type";
 
 export function FormField<T extends FieldValues>({
   name,
-  register,
-  errors,
   label,
-  type = "text",
-  placeholder,
-  leftIcon,
-  rightIcon,
-  onRightIconClick,
+  ...inputProps
 }: Readonly<FormFieldProps<T>>) {
-  const error = errors?.[name]?.message as string | undefined;
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<T>();
+
+  const error = errors[name]?.message as string | undefined;
 
   return (
     <div className="space-y-1.5">
@@ -25,12 +25,8 @@ export function FormField<T extends FieldValues>({
 
       <Input
         id={name}
-        type={type}
-        placeholder={placeholder}
-        leftIcon={leftIcon}
-        rightIcon={rightIcon}
-        onRightIconClick={onRightIconClick}
         aria-invalid={Boolean(error)}
+        {...inputProps}
         {...register(name)}
       />
 
