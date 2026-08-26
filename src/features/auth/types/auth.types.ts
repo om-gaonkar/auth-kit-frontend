@@ -5,6 +5,15 @@ export interface User {
   role: string;
 }
 
+export interface LoginUser{
+  email:string,
+  password:string
+}
+
+export interface RegisterUser extends LoginUser{
+  name: string,
+}
+
 import type { ReactNode } from "react";
 import type { LoginFormType, RegisterFormType } from "../schemas/auth.schemas";
 import type { Path } from "react-hook-form";

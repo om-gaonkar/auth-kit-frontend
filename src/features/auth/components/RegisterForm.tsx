@@ -1,15 +1,34 @@
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "../../../components/ui/Button/Button";
 import { Form } from "../../../components/ui/Form/Form";
 import { FormField } from "../../../components/ui/FormField/FormField";
+import { registerApi } from "../api/auth.api";
 import {
   registerUserSchema,
   type RegisterFormType,
 } from "../schemas/auth.schemas";
 import { registerFields } from "../types/AuthFields";
+import { appToast } from "../../../components/common/Toaster/Toast";
+import { useNavigate } from "react-router";
 
 export default function RegisterForm() {
-  const handleRegister = (data) => {
-    console.log("RHFData>>>", data);
+  const navigate = useNavigate();
+
+  const registerMutation = useMutation({
+    mutationFn: registerApi,
+
+    onSuccess: (res) => {
+      appToast.success(res.message || "user registered successfully");
+      navigate("/auth/login");
+    },
+    onError: (error) => {
+      appToast.error(error.message);
+    },
+  });
+
+  const handleRegister = async (data: RegisterFormType) => {
+    const { confirmPassword, ...payload } = data;
+    registerMutation.mutate(payload);
   };
 
   return (
@@ -27,11 +46,11 @@ export default function RegisterForm() {
             <Button
               type="submit"
               disabled={
-                !methods.formState.isValid || methods.formState.isSubmitting
+                !methods.formState.isValid || registerMutation.isPending
               }
-              isLoading={methods.formState.isSubmitting}
+              isLoading={registerMutation.isPending}
             >
-              {methods.formState.isSubmitting
+              {registerMutation.isPending
                 ? "Creating account"
                 : "Create account"}
             </Button>

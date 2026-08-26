@@ -12,5 +12,5 @@ export default function PublicRoute() {
     );
   }
 
-  return isAuthenticated ? <Navigate to="/user/profile" replace /> : <Outlet />;
+  return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
 }

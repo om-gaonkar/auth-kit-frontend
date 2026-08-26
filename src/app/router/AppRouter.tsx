@@ -12,8 +12,7 @@ import NotFound from "../../components/common/NotFound/NotFound";
 import Loading from "../../components/common/Loader/Loading";
 
 export default function AppRouter() {
-  const { isAuthenticated, user, isLoading } = useAuth();
-  console.log("isAuth>>>", isAuthenticated, "user>>>", user);
+  const { isLoading } = useAuth();
   if (isLoading) {
     return (
       <div>

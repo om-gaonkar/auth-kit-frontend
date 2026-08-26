@@ -1,12 +1,34 @@
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "../../../components/ui/Button/Button";
 import { Form } from "../../../components/ui/Form/Form";
 import { FormField } from "../../../components/ui/FormField/FormField";
 import { loginUserSchema, type LoginFormType } from "../schemas/auth.schemas";
 import { loginFields } from "../types/AuthFields";
+import { useNavigate } from "react-router";
+import { appToast } from "../../../components/common/Toaster/Toast";
+import { loginApi } from "../api/auth.api";
+import { useAuth } from "../../../app/providers/Auth/AuthContext";
 
 export default function LoginForm() {
-  const handleLogin = (data) => {
-    console.log("RHFData>>>", data);
+  const navigate = useNavigate();
+  const { setIsAuthenticated, setUser, setAccessToken } = useAuth();
+
+  const loginMutation = useMutation({
+    mutationFn: loginApi,
+
+    onSuccess: (res) => {
+      setUser(res.data.user);
+      setAccessToken(res.data.accessToken);
+      setIsAuthenticated(true);
+      navigate("/user/profile");
+    },
+    onError: (error) => {
+      appToast.error(error.message);
+    },
+  });
+
+  const handleLogin = (data: LoginFormType) => {
+    loginMutation.mutate(data);
   };
 
   return (
@@ -24,14 +46,10 @@ export default function LoginForm() {
 
             <Button
               type="submit"
-              disabled={
-                !methods.formState.isValid || methods.formState.isSubmitting
-              }
-              isLoading={methods.formState.isSubmitting}
+              disabled={!methods.formState.isValid || loginMutation.isPending}
+              isLoading={loginMutation.isPending}
             >
-              {methods.formState.isSubmitting
-                ? "Creating account"
-                : "Create account"}
+              {loginMutation.isPending ? "Creating account" : "Create account"}
             </Button>
           </div>
         )}

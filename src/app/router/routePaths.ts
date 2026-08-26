@@ -26,7 +26,7 @@ export const navbarRoutes = [
   },
   {
     label: "About",
-    path: "/about",
+    path: "/user/profile",
   },
   {
     label: "Services",

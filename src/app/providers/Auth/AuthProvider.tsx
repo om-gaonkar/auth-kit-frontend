@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-// import { CheckAuth } from "../api/CheckAuth";
 import { AuthContext, type User } from "./AuthContext";
+import { refresh } from "../../../features/auth/api/auth.api";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -18,10 +18,15 @@ export default function AuthProvider({
   useEffect(() => {
     const initAuth = async () => {
       try {
-        // const data = await CheckAuth();
-        // setAccessToken(data.accessToken);
-        // setUser(data.user); // if your refresh endpoint returns user
-        // setIsAuthenticated(true);
+        const data = await refresh();
+        console.log("data>>>", data);
+        setAccessToken(data.data.accessToken);
+        // const res = await meApi(data.data.accessToken);
+        // console.log("me>>>>>", res);
+        // setUser(res.data);
+        setIsAuthenticated(true);
+        setUser(data.data.user); // if your refresh endpoint returns user
+        setIsAuthenticated(true);
       } catch (err) {
         setAccessToken(null);
         setUser(null);
