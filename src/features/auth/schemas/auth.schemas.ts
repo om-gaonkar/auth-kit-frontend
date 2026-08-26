@@ -19,10 +19,10 @@ export const registerUserSchema = z
   .object({
     name: z
       .string()
-      .min(2, "First Name must be at least 2 characters")
-      .max(50, "First Name is too large")
-      .regex(nameRegex, { message: "Only letters are allowed" })
-      .regex(whitespaceRegex, { message: "Spaces are not allowed" }),
+      .min(2, "Name must be at least 2 characters")
+      .max(50, "Name is too large")
+      .regex(nameRegex, { message: "Only letters are allowed" }),
+      // .regex(whitespaceRegex, { message: "Spaces are not allowed" }),
       
     email: z.email("Invalid email address").trim().toLowerCase(),
 

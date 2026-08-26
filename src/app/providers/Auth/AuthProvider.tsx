@@ -19,10 +19,9 @@ export default function AuthProvider({
     const initAuth = async () => {
       try {
         // const data = await CheckAuth();
-
         // setAccessToken(data.accessToken);
         // setUser(data.user); // if your refresh endpoint returns user
-        setIsAuthenticated(true);
+        // setIsAuthenticated(true);
       } catch (err) {
         setAccessToken(null);
         setUser(null);

@@ -1,4 +1,3 @@
-import { Lock, Mail, User } from "lucide-react";
 import { Button } from "../../../components/ui/Button/Button";
 import { Form } from "../../../components/ui/Form/Form";
 import { FormField } from "../../../components/ui/FormField/FormField";
@@ -6,6 +5,7 @@ import {
   registerUserSchema,
   type RegisterFormType,
 } from "../schemas/auth.schemas";
+import { registerFields } from "../types/AuthFields";
 
 export default function RegisterForm() {
   const handleRegister = (data) => {
@@ -16,50 +16,27 @@ export default function RegisterForm() {
     <div>
       <Form<RegisterFormType>
         schema={registerUserSchema}
-        defaultValues={{
-          name: "",
-          email: "",
-          password: "",
-        }}
         mode="onChange"
         onSubmit={handleRegister}
       >
-        <div className="flex flex-col gap-3 w-full">
-          <FormField<RegisterFormType>
-            name="name"
-            placeholder="Full name"
-            autoComplete="name"
-            leftIcon={<User className="size-4" />}
-          />
-
-          <FormField<RegisterFormType>
-            name="email"
-            type="email"
-            leftIcon={<Mail className="size-4" />}
-            placeholder="Email address"
-            autoComplete="email"
-          />
-
-          <FormField<RegisterFormType>
-            name="password"
-            type="password"
-            placeholder="Password"
-            autoComplete="new-password"
-            leftIcon={<Lock className="size-4" />}
-            passwordToggle
-          />
-
-          <FormField<RegisterFormType>
-            name="confirmPassword"
-            type="password"
-            placeholder="Password"
-            autoComplete="new-password"
-            leftIcon={<Lock className="size-4" />}
-            passwordToggle
-          />
-
-          <Button type="submit">Create account</Button>
-        </div>
+        {(methods) => (
+          <div className="mt-8 flex w-full flex-col gap-3">
+            {registerFields.map((field) => (
+              <FormField<RegisterFormType> key={field.name} {...field} />
+            ))}
+            <Button
+              type="submit"
+              disabled={
+                !methods.formState.isValid || methods.formState.isSubmitting
+              }
+              isLoading={methods.formState.isSubmitting}
+            >
+              {methods.formState.isSubmitting
+                ? "Creating account"
+                : "Create account"}
+            </Button>
+          </div>
+        )}
       </Form>
     </div>
   );

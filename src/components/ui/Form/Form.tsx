@@ -7,6 +7,7 @@ import {
   type FieldValues,
   type SubmitHandler,
   type UseFormProps,
+  type UseFormReturn,
 } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,9 +15,12 @@ import type { z } from "zod";
 
 type FormProps<T extends FieldValues> = {
   schema: z.ZodType<T, T>;
+
   defaultValues?: DefaultValues<T>;
+
   onSubmit: SubmitHandler<T>;
-  children: ReactNode;
+
+  children: ReactNode | ((methods: UseFormReturn<T>) => ReactNode);
 } & Omit<UseFormProps<T>, "defaultValues" | "resolver">;
 
 export function Form<T extends FieldValues>({
@@ -32,9 +36,11 @@ export function Form<T extends FieldValues>({
     resolver: zodResolver(schema) as UseFormProps<T>["resolver"],
   });
 
+  const content = typeof children === "function" ? children(methods) : children;
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>{content}</form>
     </FormProvider>
   );
 }

@@ -4,3 +4,26 @@ export interface User {
   email: string;
   role: string;
 }
+
+import type { ReactNode } from "react";
+import type { LoginFormType, RegisterFormType } from "../schemas/auth.schemas";
+import type { Path } from "react-hook-form";
+
+export type RegisterField = {
+  name: Path<RegisterFormType>;
+  type?: React.HTMLInputTypeAttribute;
+  placeholder: string;
+  autoComplete: string;
+  leftIcon: ReactNode;
+  passwordToggle?: boolean;
+};
+
+
+export type LoginField = {
+  name: Path<LoginFormType>;
+  type?: React.HTMLInputTypeAttribute;
+  placeholder: string;
+  autoComplete: string;
+  leftIcon: ReactNode;
+  passwordToggle?: boolean;
+};
