@@ -65,3 +65,63 @@ export async function meApi(accessToken: string | null) {
   }
   return result;
 }
+
+export async function logoutCurrentuserApi() {
+  const res = await fetch(`${BASE_URL}/api/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("unable to logout");
+  }
+  return res;
+}
+
+export async function getUserSessionsApi(accessToken: string | null) {
+  const res = await fetch(`${BASE_URL}/api/auth/sessions`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result.message || "unable to fetch devices");
+  }
+  return result;
+}
+
+export async function logoutSpecificSessionApi(accessToken: string | null, familyId: string) {
+  const res = await fetch(`${BASE_URL}/api/auth/sessions/${familyId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result.message || "unable to logout this device");
+  }
+  return result;
+}
+
+export async function logoutAllDevicesApi(accessToken: string | null) {
+  const res = await fetch(`${BASE_URL}/api/auth/logout-all`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result.message || "unable to refresh");
+  }
+  return result;
+}

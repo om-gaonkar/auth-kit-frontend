@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { AuthContext, type User } from "./AuthContext";
-import { refresh } from "../../../features/auth/api/auth.api";
+import {
+  logoutCurrentuserApi,
+  refresh,
+} from "../../../features/auth/api/auth.api";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -21,9 +24,6 @@ export default function AuthProvider({
         const data = await refresh();
         console.log("data>>>", data);
         setAccessToken(data.data.accessToken);
-        // const res = await meApi(data.data.accessToken);
-        // console.log("me>>>>>", res);
-        // setUser(res.data);
         setIsAuthenticated(true);
         setUser(data.data.user); // if your refresh endpoint returns user
       } catch (err) {
@@ -38,6 +38,16 @@ export default function AuthProvider({
 
     initAuth();
   }, []);
+
+  const logout = async () => {
+    try {
+      await logoutCurrentuserApi();
+    } finally {
+      setUser(null);
+      setAccessToken(null);
+      setIsAuthenticated(false);
+    }
+  };
   const value = useMemo(
     () => ({
       user,
@@ -47,6 +57,7 @@ export default function AuthProvider({
       setUser,
       setAccessToken,
       setIsAuthenticated,
+      logout,
     }),
     [user, accessToken, isAuthenticated, isLoading],
   );

@@ -14,7 +14,7 @@ export const ROUTES = {
 
   USERS: {
     ROOT: "/user",
-    PROFILE: "profile",
+    PROFILE: "user/profile",
     DETAILS: (id = ":id") => `/users/${id}`,
   },
 } as const;
@@ -26,7 +26,7 @@ export const navbarRoutes = [
   },
   {
     label: "About",
-    path: "/user/profile",
+    path: "/about",
   },
   {
     label: "Services",

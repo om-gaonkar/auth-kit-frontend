@@ -15,6 +15,7 @@ export interface AuthContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
