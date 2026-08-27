@@ -7,7 +7,7 @@ interface NavbarProps {
   logo?: string;
 }
 
-export const Navbar = ({ logo = "Brand" }: NavbarProps) => {
+export const Navbar = ({ logo = "AuthKit" }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
