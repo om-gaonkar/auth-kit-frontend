@@ -1,45 +1,41 @@
 import { Route, Routes } from "react-router";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
-import HomePage from "../../pages/Home/HomePage";
 import AuthLayout from "../../layouts/AuthLayout/AuthLayout";
-import LoginPage from "../../pages/Auth/LoginPage";
-import RegisterPage from "../../pages/Auth/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
-import Profile from "../../pages/Users/Profile";
 import PublicRoute from "./PublicRoute";
-import { useAuth } from "../providers/Auth/AuthContext";
-import NotFound from "../../components/common/NotFound/NotFound";
 import Loading from "../../components/common/Loader/Loading";
-
+import { lazy, Suspense } from "react";
+// Lazy Loaded pages
+const HomePage = lazy(() => import("../../pages/Home/HomePage"));
+const LoginPage = lazy(() => import("../../pages/Auth/LoginPage"));
+const RegisterPage = lazy(() => import("../../pages/Auth/RegisterPage"));
+const Profile = lazy(() => import("../../pages/Users/Profile"));
+const NotFound = lazy(
+  () => import("../../components/common/NotFound/NotFound"),
+);
 export default function AppRouter() {
-  const { isLoading } = useAuth();
-  if (isLoading) {
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
-  }
   return (
     <div>
-      <Routes>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="*" element={<NotFound />} />
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="*" element={<NotFound />} />
 
-          <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
-            <Route path="/user">
-              <Route path="profile" element={<Profile />} />
+            <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
+              <Route path="/user">
+                <Route path="profile" element={<Profile />} />
+              </Route>
             </Route>
           </Route>
-        </Route>
-        <Route element={<PublicRoute />}>
-          <Route path="/auth" element={<AuthLayout />}>
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
+          <Route element={<PublicRoute />}>
+            <Route path="/auth" element={<AuthLayout />}>
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
+        </Routes>
+      </Suspense>
     </div>
   );
 }

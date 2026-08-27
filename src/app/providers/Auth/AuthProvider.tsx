@@ -26,7 +26,6 @@ export default function AuthProvider({
         // setUser(res.data);
         setIsAuthenticated(true);
         setUser(data.data.user); // if your refresh endpoint returns user
-        setIsAuthenticated(true);
       } catch (err) {
         setAccessToken(null);
         setUser(null);

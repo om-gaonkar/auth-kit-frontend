@@ -49,7 +49,7 @@ export default function LoginForm() {
               disabled={!methods.formState.isValid || loginMutation.isPending}
               isLoading={loginMutation.isPending}
             >
-              {loginMutation.isPending ? "Creating account" : "Create account"}
+              {loginMutation.isPending ? "Logging in..." : "Login"}
             </Button>
           </div>
         )}

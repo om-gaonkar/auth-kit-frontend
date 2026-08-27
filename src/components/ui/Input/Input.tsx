@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 import { commonCss, type InputProps } from "./type";
