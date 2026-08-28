@@ -9,6 +9,9 @@ export interface UserSession {
   expiresAt: string;
   revokedAt: string | null;
 
+  // Original login time
+  sessionCreatedAt: string;
+
   device: {
     userAgent: string | null;
     browser: string | null;

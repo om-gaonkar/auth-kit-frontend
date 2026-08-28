@@ -1,3 +1,4 @@
+import { authFetch } from "../../../lib/api/authFetch";
 import type { LoginUser, RegisterUser } from "../types/auth.types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -81,12 +82,12 @@ export async function logoutCurrentuserApi() {
   return res;
 }
 
-export async function getUserSessionsApi(accessToken: string | null) {
-  const res = await fetch(`${BASE_URL}/api/auth/sessions`, {
+export async function getUserSessionsApi() {
+  const res = await authFetch(`${BASE_URL}/api/auth/sessions`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+
     },
   });
   const result = await res.json();

@@ -2,32 +2,41 @@ import { tokenManager } from "../auth/tokenManager";
 
 let refreshPromise: Promise<string | null> | null = null;
 
+interface AuthFetchOptions extends RequestInit {
+  accessToken?: string | null;
+}
+
 export async function authFetch(
   input: RequestInfo | URL,
-  init: RequestInit = {},
+  options: AuthFetchOptions = {},
 ): Promise<Response> {
-  const token = tokenManager.getToken();
+  const {
+    accessToken: manualAccessToken,
+    headers,
+    ...fetchOptions
+  } = options;
 
-  const headers = new Headers(init.headers);
+  const token =
+    manualAccessToken ?? tokenManager.getToken();
+
+  const requestHeaders = new Headers(headers);
 
   if (token) {
-    headers.set(
+    requestHeaders.set(
       "Authorization",
       `Bearer ${token}`,
     );
   }
 
-  let response = await fetch(input, {
-    ...init,
-    headers,
+  const response = await fetch(input, {
+    ...fetchOptions,
+    headers: requestHeaders,
   });
 
-  // Request succeeded
   if (response.status !== 401) {
     return response;
   }
 
-  // Don't create multiple refresh requests
   if (!refreshPromise) {
     refreshPromise = tokenManager
       .refreshToken()
@@ -42,18 +51,15 @@ export async function authFetch(
     return response;
   }
 
-  // Retry original request with new token
-  const retryHeaders = new Headers(init.headers);
+  const retryHeaders = new Headers(headers);
 
   retryHeaders.set(
     "Authorization",
     `Bearer ${newToken}`,
   );
 
-  response = await fetch(input, {
-    ...init,
+  return fetch(input, {
+    ...fetchOptions,
     headers: retryHeaders,
   });
-
-  return response;
 }

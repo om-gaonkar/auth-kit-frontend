@@ -8,14 +8,16 @@ import { useAuth } from "../../../../app/providers/Auth/AuthContext";
 import { Button } from "../../../../components/ui/Button/Button";
 import { LogOut } from "lucide-react";
 import type { UserSession } from "../../types/device.type";
+import { useNavigate } from "react-router";
+import { appToast } from "../../../../components/common/Toaster/Toast";
 
 export default function DeviceDetails() {
   const { accessToken } = useAuth();
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
   const { isPending, error, data } = useQuery({
-    queryKey: ["userSessions", accessToken],
-    queryFn: () => getUserSessionsApi(accessToken),
+    queryKey: ["userSessions"],
+    queryFn: () => getUserSessionsApi(),
     enabled: !!accessToken,
   });
 
@@ -27,6 +29,7 @@ export default function DeviceDetails() {
       queryClient.invalidateQueries({
         queryKey: ["userSessions"],
       });
+      appToast.success("user logged out successfully");
     },
   });
 
@@ -37,6 +40,8 @@ export default function DeviceDetails() {
       queryClient.invalidateQueries({
         queryKey: ["userSessions"],
       });
+      navigate("/");
+      appToast.success("All user logged out successfully");
     },
   });
 
@@ -53,6 +58,11 @@ export default function DeviceDetails() {
   const logoutAllSession = () => {
     logoutAllMutation.mutate();
   };
+  console.log("Session:", sessions);
+
+  console.log("createdAt:", sessions[0]?.createdAt);
+
+  console.log("parsed:", new Date(sessions[0]?.createdAt || ""));
 
   return (
     <div>
@@ -105,7 +115,11 @@ export default function DeviceDetails() {
                     {session.device?.deviceType || "Unknown Device"}
                   </p>
                   <p className="mt-1 text-xs text-muted">
-                    Signed in: {new Date(session.createdAt).toLocaleString()}
+                    Signed in:{" "}
+                    {new Date(session.sessionCreatedAt).toLocaleString()}
+                  </p>
+                  <p className="mt-1 text-xs text-muted">
+                    Last seen: {new Date(session.createdAt).toLocaleString()}
                   </p>
                 </div>
                 {!session.isCurrent && (
