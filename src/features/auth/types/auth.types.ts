@@ -2,8 +2,17 @@ export interface User {
   _id: string;
   name: string;
   email: string;
-  avatar:string;
-  role: string;
+  avatar: string | null;
+  role: "user" | "admin";
+  isActive: boolean;
+  lastLogin: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  accessToken: string;
 }
 
 export interface LoginUser{

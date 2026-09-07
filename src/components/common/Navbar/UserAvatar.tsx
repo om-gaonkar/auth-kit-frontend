@@ -1,13 +1,22 @@
 interface UserAvatarProps {
   email?: string;
+  avatar?: string;
 }
 
-export function UserAvatar({ email }: Readonly<UserAvatarProps>) {
+export function UserAvatar({ email, avatar }: Readonly<UserAvatarProps>) {
   const initial = email?.charAt(0).toUpperCase() || "U";
 
   return (
-    <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-      {initial}
+    <div className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+      {avatar ? (
+        <img
+          src={avatar}
+          alt={email || "User"}
+          className="size-full object-cover"
+        />
+      ) : (
+        initial
+      )}
     </div>
   );
 }

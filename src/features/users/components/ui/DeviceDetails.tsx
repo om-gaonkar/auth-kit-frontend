@@ -10,9 +10,11 @@ import { LogOut } from "lucide-react";
 import type { UserSession } from "../../types/device.type";
 import { useNavigate } from "react-router";
 import { appToast } from "../../../../components/common/Toaster/Toast";
+import { tokenManager } from "../../../../lib/auth/tokenManager";
 
 export default function DeviceDetails() {
-  const { accessToken } = useAuth();
+  const { accessToken, setUser, setAccessToken, setIsAuthenticated } =
+    useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { isPending, error, data } = useQuery({
@@ -41,6 +43,10 @@ export default function DeviceDetails() {
         queryKey: ["userSessions"],
       });
       navigate("/");
+      tokenManager.setToken(null);
+      setUser(null);
+      setAccessToken(null);
+      setIsAuthenticated(false);
       appToast.success("All user logged out successfully");
     },
   });
@@ -61,6 +67,7 @@ export default function DeviceDetails() {
   console.log("Session:", sessions);
 
   console.log("createdAt:", sessions[0]?.createdAt);
+  console.log("AccessToken:", accessToken);
 
   console.log("parsed:", new Date(sessions[0]?.createdAt || ""));
 

@@ -43,7 +43,7 @@ export function ProfileMenu() {
         aria-expanded={isOpen}
         aria-haspopup="menu"
       >
-        <UserAvatar email={user.email} />
+        <UserAvatar email={user.email} avatar={user.avatar} />
 
         <span className="max-w-36 truncate text-sm font-medium text-foreground">
           {user.email}
@@ -66,7 +66,7 @@ export function ProfileMenu() {
           >
             {/* User Details */}
             <div className="flex items-center gap-3 px-3 py-3">
-              <UserAvatar email={user.email} />
+              <UserAvatar email={user.email} avatar={user.avatar} />
 
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground">Account</p>

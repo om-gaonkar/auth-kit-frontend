@@ -12,7 +12,9 @@ const passwordRegex = {
 
 export const loginUserSchema = z.object({
   email: z.email("Invalid email address").trim().toLowerCase(),
-  password: z.string().min(8, "password must be atleast 8 characters"),
+  password: z.string().min(8, "password must be atleast 8 characters").regex(whitespaceRegex, {
+        message: "Spaces are not allowed",
+      }),
 });
 
 export const registerUserSchema = z
