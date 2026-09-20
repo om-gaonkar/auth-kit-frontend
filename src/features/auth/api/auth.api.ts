@@ -126,3 +126,55 @@ export async function logoutAllDevicesApi(accessToken: string | null) {
   }
   return result;
 }
+
+export async function sendVerificationOtpApi(email: string) {
+  const res = await fetch(
+    `${BASE_URL}/api/auth/send-verification-otp`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    },
+  );
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw new Error(
+      result.message || "Unable to send verification OTP",
+    );
+  }
+
+  return result;
+}
+
+export async function verifyEmailOtpApi(
+  email: string,
+  otp: string,
+) {
+  const res = await fetch(
+    `${BASE_URL}/api/auth/verify-email`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        otp,
+      }),
+    },
+  );
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw new Error(
+      result.message || "Unable to verify email",
+    );
+  }
+
+  return result;
+}
